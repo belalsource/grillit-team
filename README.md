@@ -20,7 +20,8 @@ Renaming the repo (or changing a person's `slug`) breaks the printed codes.
 1. Open `script.js` on GitHub and click the pencil icon (Edit).
 2. Find the `TEAM` list at the top (lines 14–18). Each line is one person.
 3. Change the text between the quotes (name, title or phone). Keep the quotes and commas.
-4. Click **Commit changes**. The site updates by itself within about a minute.
+4. Click **Commit changes**. Tip: if phones keep showing the old version, open `index.html` and raise the number in `?v=2` (to `?v=3`, and so on) next to `styles.css` and `script.js`.
+    The site updates by itself within about a minute.
 5. If you changed a phone number or name, also edit that person's file in `vcards/`
    (e.g. `vcards/mazen-hamdy.vcf`) so the "Save contact" button matches.
 
