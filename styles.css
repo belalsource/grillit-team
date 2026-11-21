@@ -34,8 +34,23 @@ body {
   gap: var(--gap);
   max-width: 420px;
   margin: 0 auto;
-  padding: 16px 12px;
+  padding: calc(16px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right))
+           calc(16px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
   align-items: stretch; /* tiles in one row share the same height */
+  /* Fill the phone screen: rows marked 1fr share any leftover height */
+  /* Exactly one screen tall, but never shorter than the content needs */
+  height: 100vh;
+  height: 100svh;
+  min-height: min-content;
+}
+
+/* Row plans: which rows grow to fill the screen (content size is the minimum) */
+.view-team   { grid-template-rows: minmax(min-content, 1.15fr) repeat(3, minmax(min-content, 1fr)) auto auto; }
+.view-person { grid-template-rows: minmax(min-content, 0.8fr) minmax(min-content, 1fr) repeat(2, minmax(min-content, 1.25fr)) auto auto; }
+
+/* On big screens (desktop) don't stretch into a tall thin column */
+@media (min-width: 600px) and (min-height: 900px) {
+  .grid { height: auto; min-height: 0; grid-template-rows: none; }
 }
 
 .span-1 { grid-column: span 1; }
@@ -90,6 +105,7 @@ a.tile:focus-visible {
 /* ---------- Hero / logo ---------- */
 .hero {
   align-items: center;
+  min-height: 150px;
   justify-content: center;
   text-align: center;
   padding-top: 20px;
@@ -97,7 +113,7 @@ a.tile:focus-visible {
 }
 .logo {
   display: block;
-  width: 112px;
+  width: clamp(112px, 34vw, 140px);
   height: auto;
 }
 .brand-line {
@@ -105,7 +121,7 @@ a.tile:focus-visible {
   font-family: "Playfair Display", Georgia, serif;
   font-style: italic;
   font-weight: 500;
-  font-size: 16px;
+  font-size: clamp(16px, 4.6vw, 18px);
   line-height: 1.35;
   color: var(--dark);
 }
@@ -118,7 +134,7 @@ a.tile:focus-visible {
 }
 .person.span-4 { min-height: 84px; }
 .person .label { padding-right: 30px; } /* never runs under the arrow */
-.person .name { font-size: 16px; }
+.person .name { font-size: clamp(16px, 5vw, 20px); }
 
 .arrow-dot {
   position: absolute;
@@ -142,7 +158,7 @@ a.tile:focus-visible {
   min-height: 48px;
   padding: var(--pad);
 }
-.social svg { width: 21px; height: 21px; }
+.social svg { width: clamp(21px, 6vw, 24px); height: clamp(21px, 6vw, 24px); }
 
 /* ---------- Footer ---------- */
 .footer {
@@ -161,8 +177,8 @@ a.tile:focus-visible {
   padding-bottom: 20px;
 }
 
-.card-head { padding: 16px; gap: 6px; }
-.card-head .name { font-size: 26px; }
+.card-head { padding: 16px; gap: 6px; justify-content: center; }
+.card-head .name { font-size: clamp(24px, 7.4vw, 30px); }
 .phone {
   margin: 2px 0 0;
   font-size: 13px;
@@ -171,12 +187,12 @@ a.tile:focus-visible {
 }
 
 .action {
-  height: 84px;
+  min-height: 84px;
   justify-content: space-between;
   font-weight: 600;
-  font-size: 14px;
+  font-size: clamp(14px, 4.2vw, 16px);
 }
-.action svg { width: 20px; height: 20px; }
+.action svg { width: 24px; height: 24px; }
 
 .action.call {
   background: var(--orange);
@@ -204,6 +220,18 @@ a.tile:focus-visible {
 .back svg { width: 20px; height: 20px; color: var(--orange); }
 
 .noscript { text-align: center; padding: 24px; color: var(--muted-2); }
+
+/* Short phones (e.g. 360×640): shrink minimums so everything fits without scrolling */
+@media (max-height: 700px) {
+  .grid { padding-top: calc(12px + env(safe-area-inset-top)); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .hero { min-height: 0; padding-top: 14px; padding-bottom: 14px; }
+  .brand-line { margin-top: 8px; }
+  .person { min-height: 84px; }
+  .person.span-4 { min-height: 72px; }
+  .action { min-height: 72px; }
+  .logo-tile { padding-top: 14px; padding-bottom: 14px; }
+  .footer { margin-top: 2px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   a.tile { transition: none; }

@@ -110,6 +110,7 @@ function render() {
   const person = TEAM.find((p) => p.slug === slug);
   const app = document.getElementById("app");
 
+  app.className = "grid " + (person ? "view-person" : "view-team");
   app.innerHTML = person ? personView(person) : teamView();
   document.title = person ? `${person.name} – Grillit` : "Grillit Team";
   window.scrollTo(0, 0);
